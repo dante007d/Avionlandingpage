@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090a0b" />
+    <meta name="description" content="AVION Tech Events — three challenges, one signal. Think beyond the expected." />
+    <title>AVION — Think Beyond the Signal</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Syncopate:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="torus-knot.js" defer></script>
+    <script src="led-scroller.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Real-time scroll indicator -->
+    <div id="scroll-progress" class="scroll-progress-bar" aria-hidden="true"></div>
+
+    <header class="site-header" id="top">
+      <a class="brand-led-link" href="#top" aria-label="AVION Tech Events home">
+        <canvas id="nav-led-canvas" width="220" height="36" aria-label="AVION LED banner"></canvas>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#events">Events <span>03</span></a>
+        <a href="#signal">The signal</a>
+      </nav>
+      <div class="header-meta"><span class="live-dot"></span> SYSTEM OPEN</div>
+    </header>
+
+    <main>
+      <!-- ═══ HERO with 3D Torus Knot ASCII background ═══ -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-canvas-wrap" aria-hidden="true">
+          <canvas id="hero-canvas"></canvas>
+          <div class="hero-canvas-overlay"></div>
+        </div>
+
+        <div class="hero-inner section-shell">
+          <div class="hero-center-container reveal">
+            <!-- Centered AVION Glitch Title with symmetrical HUD wings -->
+            <div class="hero-brand-display" aria-label="AVION">
+              <span class="avion-wing avion-wing--l" aria-hidden="true"></span>
+              <h1 class="avion-glitch-text" id="hero-title" data-text="AVION">AVION</h1>
+              <span class="avion-wing avion-wing--r" aria-hidden="true"></span>
+            </div>
+
+            <!-- Spacing divider giving clear distance -->
+            <div class="hero-distance-block" aria-hidden="true">
+              <span class="hud-line"></span>
+              <span class="hud-diamond">◆</span>
+              <span class="hud-line"></span>
+            </div>
+
+            <!-- Centered Challenge Radar HUD Box -->
+            <div class="hero-telemetry-panel">
+              <div class="telemetry-corner tl" aria-hidden="true"></div>
+              <div class="telemetry-corner tr" aria-hidden="true"></div>
+              <div class="telemetry-corner bl" aria-hidden="true"></div>
+              <div class="telemetry-corner br" aria-hidden="true"></div>
+              
+              <div class="hero-led-box">
+                <div class="box-status-header">
+                  <span class="status-dot-blink" aria-hidden="true"></span>
+                  <span class="box-status-label">CHALLENGE RADAR</span>
+                  <span class="box-hud-code">LIVE // FREQ 1420.4 MHz</span>
+                </div>
+                <canvas id="box-led-canvas" width="340" height="42" aria-label="Challenge roast marquee"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ AVION acronym reveal ═══ -->
+      <section class="acronym-section" aria-label="AVION meaning">
+        <div class="acronym-strip section-shell">
+          <div class="acronym-word reveal-word"><span class="acronym-letter">A</span><span class="acronym-rest">dvancement</span></div>
+          <div class="acronym-word reveal-word"><span class="acronym-letter">V</span><span class="acronym-rest">ision</span></div>
+          <div class="acronym-word reveal-word"><span class="acronym-letter">I</span><span class="acronym-rest">nnovation</span></div>
+          <div class="acronym-word reveal-word"><span class="acronym-letter">O</span><span class="acronym-rest">pportunity</span></div>
+          <div class="acronym-word reveal-word"><span class="acronym-letter">N</span><span class="acronym-rest">ext Generation</span></div>
+        </div>
+      </section>
+
+      <!-- ═══ Events (Interactive Challenge Cards with Videos) ═══ -->
+      <section class="events-section section-shell" id="events" aria-labelledby="events-title">
+        <div class="section-heading reveal">
+          <div>
+            <p class="eyebrow"><span>EVENT INDEX</span><i></i> THREE OPEN CASES</p>
+            <h2 id="events-title">Know your<br /><em>challenges.</em></h2>
+          </div>
+          <p class="section-intro">Three ways into the unknown. Tap any case card to view the complete mission dossier.</p>
+        </div>
+        <div class="event-grid event-stack">
+          <!-- CARD 1: Project Eclipse -->
+          <article class="event-card reveal" role="button" tabindex="0" data-case="eclipse" data-stack-card="0" aria-haspopup="dialog" aria-label="View Project Eclipse details">
+            <div class="event-image">
+              <video class="card-video" loop muted playsinline disablepictureinpicture preload="metadata" poster="assets/hero-eclipse.png">
+                <source src="assets/event-eclipse.mp4" type="video/mp4" />
+              </video>
+              <span class="case-index">CASE / 01</span>
+              <span class="case-badge">VIEW INFO ↗</span>
+              <span class="case-corner" aria-hidden="true"></span>
+            </div>
+            <div class="event-info">
+              <p class="event-type">INVESTIGATION</p>
+              <h3>Project<br /><em>Eclipse</em></h3>
+              <p class="event-description">A classified AI project has been compromised. Research files disappeared and the lead scientist is missing. Uncover the insider.</p>
+              <div class="event-foot">
+                <span>CLASSIFIED / ECL-014</span>
+                <span class="event-action">VIEW INFO <i>↗</i></span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 2: Cyber Mystery Arena -->
+          <article class="event-card reveal" role="button" tabindex="0" data-case="mystery" data-stack-card="1" aria-haspopup="dialog" aria-label="View Cyber Mystery Arena details">
+            <div class="event-image">
+              <video class="card-video" loop muted playsinline disablepictureinpicture preload="metadata" poster="assets/event-mystery.png">
+                <source src="assets/event-galaxy.mp4" type="video/mp4" />
+              </video>
+              <span class="case-index">CASE / 02</span>
+              <span class="case-badge">VIEW INFO ↗</span>
+              <span class="case-corner" aria-hidden="true"></span>
+            </div>
+            <div class="event-info">
+              <p class="event-type">DIGITAL FORENSICS</p>
+              <h3>Cyber Mystery<br /><em>Arena</em></h3>
+              <p class="event-description">Investigate mysterious digital incidents by analysing login records, decoding secret messages, and uncovering hidden clues.</p>
+              <div class="event-foot">
+                <span>EVIDENCE ROOM / 02</span>
+                <span class="event-action">VIEW INFO <i>↗</i></span>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 3: Topic Auction Challenge -->
+          <article class="event-card reveal" role="button" tabindex="0" data-case="auction" data-stack-card="2" aria-haspopup="dialog" aria-label="View Topic Auction Challenge details">
+            <div class="event-image">
+              <video class="card-video" loop muted playsinline disablepictureinpicture preload="metadata" poster="assets/event-auction.png">
+                <source src="assets/event-tv-static.mp4" type="video/mp4" />
+              </video>
+              <span class="case-index">CASE / 03</span>
+              <span class="case-badge">VIEW INFO ↗</span>
+              <span class="case-corner" aria-hidden="true"></span>
+            </div>
+            <div class="event-info">
+              <p class="event-type">STRATEGY</p>
+              <h3>Topic Auction<br /><em>Challenge</em></h3>
+              <p class="event-description">Compete with virtual coins to purchase knowledge topics across Easy, Medium, and Hard rounds. Bid strategically to outscore the room.</p>
+              <div class="event-foot">
+                <span>THREE TIERS / ONE WINNER</span>
+                <span class="event-action">VIEW INFO <i>↗</i></span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="events-bottom"><span>TAP ANY CARD TO VIEW DETAILS</span><span class="events-line"></span><span>01 — 03</span></div>
+      </section>
+
+      <!-- ═══ Signal with Cyber Glitch & Hologram FX ═══ -->
+      <section class="signal-section" id="signal">
+        <div class="signal-scanlines" aria-hidden="true"></div>
+        <img class="wave-grid signal-wave" src="assets/wave-grid.svg" alt="" aria-hidden="true" />
+        
+        <div class="signal-copy section-shell reveal">
+          <h2 class="glitch-heading" data-text="Think beyond. Make your move.">
+            <span class="glitch-line" data-text="Think beyond.">Think beyond.</span><br />
+            <em class="glitch-line glitch-accent" data-text="Make your move.">Make your move.</em>
+          </h2>
+
+          <div class="signal-body-box">
+            <p class="signal-text">Bring your curiosity. Bring your crew. The rest is yours to figure out.</p>
+            <div class="signal-hud-specs">
+              <span class="hud-spec-item"><span class="hud-sq"></span> FREQ: ULTRA-HIGH</span>
+              <span class="hud-spec-item"><span class="hud-sq"></span> ENCRYPTION: ACTIVE</span>
+              <span class="hud-spec-item"><span class="hud-sq"></span> SYSTEM: READY</span>
+            </div>
+          </div>
+        </div>
+        <span class="signal-index">END OF TRANSMISSION / AVION 03</span>
+      </section>
+
+      <!-- ═══ Events Names Infinite Carousel ═══ -->
+      <section class="events-carousel-section" aria-label="Event Highlights Marquee">
+        <div class="carousel-hud-bar section-shell">
+          <span class="carousel-hud-label">ARENA ARCHIVES // 03 ACTIVE MISSIONS</span>
+          <span class="carousel-hud-rail"></span>
+          <span class="carousel-hud-status"><span class="hud-status-dot"></span> BROADCAST CYCLING</span>
+        </div>
+        <div class="carousel-track-wrapper">
+          <div class="carousel-track">
+            <!-- Set 1 -->
+            <div class="carousel-item" role="button" tabindex="0" data-case="eclipse" aria-label="Open Project Eclipse">
+              <span class="carousel-num">01</span>
+              <span class="carousel-badge">INVESTIGATION</span>
+              <span class="carousel-name">PROJECT ECLIPSE</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item" role="button" tabindex="0" data-case="mystery" aria-label="Open Cyber Mystery Arena">
+              <span class="carousel-num">02</span>
+              <span class="carousel-badge">DIGITAL FORENSICS</span>
+              <span class="carousel-name">CYBER MYSTERY ARENA</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item" role="button" tabindex="0" data-case="auction" aria-label="Open Topic Auction Challenge">
+              <span class="carousel-num">03</span>
+              <span class="carousel-badge">STRATEGY</span>
+              <span class="carousel-name">TOPIC AUCTION CHALLENGE</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item carousel-item--brand">
+              <span class="carousel-num">AVION</span>
+              <span class="carousel-badge carousel-badge--brand">2026</span>
+              <span class="carousel-name">THINK BEYOND THE SIGNAL</span>
+              <span class="carousel-icon">❖</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+
+            <!-- Set 2 (Identical duplicate for seamless continuous infinite marquee) -->
+            <div class="carousel-item" role="button" tabindex="0" data-case="eclipse" aria-label="Open Project Eclipse">
+              <span class="carousel-num">01</span>
+              <span class="carousel-badge">INVESTIGATION</span>
+              <span class="carousel-name">PROJECT ECLIPSE</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item" role="button" tabindex="0" data-case="mystery" aria-label="Open Cyber Mystery Arena">
+              <span class="carousel-num">02</span>
+              <span class="carousel-badge">DIGITAL FORENSICS</span>
+              <span class="carousel-name">CYBER MYSTERY ARENA</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item" role="button" tabindex="0" data-case="auction" aria-label="Open Topic Auction Challenge">
+              <span class="carousel-num">03</span>
+              <span class="carousel-badge">STRATEGY</span>
+              <span class="carousel-name">TOPIC AUCTION CHALLENGE</span>
+              <span class="carousel-icon">↗</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+            <div class="carousel-item carousel-item--brand">
+              <span class="carousel-num">AVION</span>
+              <span class="carousel-badge carousel-badge--brand">2026</span>
+              <span class="carousel-name">THINK BEYOND THE SIGNAL</span>
+              <span class="carousel-icon">❖</span>
+            </div>
+            <span class="carousel-spark" aria-hidden="true">✦</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Bottom CTA ═══ -->
+      <section class="cta-section" aria-label="Register">
+        <div class="cta-inner section-shell reveal">
+          <h2 class="cta-title">Ready to<br /><em>take off?</em></h2>
+          <p class="cta-description">Slots are limited. Register early, pick your challenge, and bring your best crew.</p>
+          <button class="register-button register-button--large" type="button" data-register>
+            <span class="register-button-text">Register now</span>
+            <span class="register-button-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 18 18" fill="none"><path d="M5 13L13 5M13 5H6M13 5V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer section-shell">
+      <a class="brand footer-brand" href="#top"><span class="brand-name">AVION</span><span class="brand-sub">TECH EVENTS <i>/</i> 03</span></a>
+      <span class="footer-copy">THREE CHALLENGES. ONE ARENA.</span>
+      <a class="back-top" href="#top">BACK TO TOP <span>↑</span></a>
+      <span class="copyright">AVION FIELD NOTES / 2026</span>
+    </footer>
+
+    <!-- ═══ Pure Information Sheet (Optimised for Mobile & Android) ═══ -->
+    <div id="case-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card" role="document">
+        <div class="modal-drag-indicator" aria-hidden="true"><span></span></div>
+        <button class="modal-close" type="button" aria-label="Close information sheet">✕</button>
+        
+        <div class="modal-content">
+          <div class="modal-header-meta">
+            <span id="modal-case-tag" class="modal-case-tag">CASE // 01</span>
+          </div>
+
+          <h3 id="modal-title" class="modal-title">Project Eclipse</h3>
+
+          <!-- Genre Section -->
+          <div class="modal-genre-wrapper">
+            <span class="genre-label">GENRE:</span>
+            <span id="modal-genre" class="modal-genre-text">Cybersecurity | AI Threat | Digital Investigation</span>
+          </div>
+
+          <!-- Description Section -->
+          <div class="modal-desc-wrapper">
+            <p id="modal-desc" class="modal-desc"></p>
+          </div>
+          
+          <!-- Mission Callout Box -->
+          <div class="modal-mission-box">
+            <div class="mission-box-header">
+              <span class="mission-label">YOUR MISSION</span>
+            </div>
+            <p id="modal-mission" class="mission-statement"></p>
+          </div>
+
+          <!-- Actions -->
+          <div class="modal-actions">
+            <button class="modal-dismiss-btn" type="button">Close Briefing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="register-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
