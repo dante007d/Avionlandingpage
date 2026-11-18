@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="torus-knot.js" defer></script>
     <script src="led-scroller.js" defer></script>
-    <script src="signal-dither.js" defer></script>
+    <script src="card-dither.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -77,12 +77,20 @@
 
       <!-- ═══ AVION acronym reveal ═══ -->
       <section class="acronym-section" aria-label="AVION meaning">
-        <div class="acronym-strip section-shell">
-          <div class="acronym-word reveal-word"><span class="acronym-letter">A</span><span class="acronym-rest">dvancement</span></div>
-          <div class="acronym-word reveal-word"><span class="acronym-letter">V</span><span class="acronym-rest">ision</span></div>
-          <div class="acronym-word reveal-word"><span class="acronym-letter">I</span><span class="acronym-rest">nnovation</span></div>
-          <div class="acronym-word reveal-word"><span class="acronym-letter">O</span><span class="acronym-rest">pportunity</span></div>
-          <div class="acronym-word reveal-word"><span class="acronym-letter">N</span><span class="acronym-rest">ext Generation</span></div>
+        <div class="section-shell">
+          <article class="dither-card reveal">
+            <canvas id="card-dither" aria-hidden="true"></canvas>
+            <div class="card-content">
+              <p class="dither-card-eyebrow">PROTOCOL // AVION</p>
+              <div class="acronym-strip">
+                <div class="acronym-word reveal-word"><span class="acronym-letter">A</span><span class="acronym-rest">dvancement</span></div>
+                <div class="acronym-word reveal-word"><span class="acronym-letter">V</span><span class="acronym-rest">ision</span></div>
+                <div class="acronym-word reveal-word"><span class="acronym-letter">I</span><span class="acronym-rest">nnovation</span></div>
+                <div class="acronym-word reveal-word"><span class="acronym-letter">O</span><span class="acronym-rest">pportunity</span></div>
+                <div class="acronym-word reveal-word"><span class="acronym-letter">N</span><span class="acronym-rest">ext Generation</span></div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -164,11 +172,8 @@
 
       <!-- ═══ Signal with Cyber Glitch & Hologram FX ═══ -->
       <section class="signal-section" id="signal">
-        <div class="signal-dither-wrap" aria-hidden="true">
-          <canvas id="signal-dither-canvas" class="signal-dither-canvas"></canvas>
-          <div class="signal-dither-overlay"></div>
-        </div>
         <div class="signal-scanlines" aria-hidden="true"></div>
+        <img class="wave-grid signal-wave" src="assets/wave-grid.svg" alt="" aria-hidden="true" />
         
         <div class="signal-copy section-shell reveal">
           <h2 class="glitch-heading" data-text="Think beyond. Make your move.">
