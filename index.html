@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="torus-knot.js" defer></script>
     <script src="led-scroller.js" defer></script>
+    <script src="dither-background.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -76,6 +77,10 @@
 
       <!-- ═══ AVION acronym reveal ═══ -->
       <section class="acronym-section" aria-label="AVION meaning">
+        <div class="acronym-dither-wrap" aria-hidden="true">
+          <canvas id="acronym-dither-canvas" class="dither-canvas"></canvas>
+          <div class="acronym-dither-overlay"></div>
+        </div>
         <div class="acronym-strip section-shell">
           <div class="acronym-word reveal-word"><span class="acronym-letter">A</span><span class="acronym-rest">dvancement</span></div>
           <div class="acronym-word reveal-word"><span class="acronym-letter">V</span><span class="acronym-rest">ision</span></div>
