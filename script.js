@@ -86,27 +86,27 @@ updateScrollState();
 function updateParallax(scrollY) {
   if (reduceMotion) return;
 
-  // Hero title parallax — drifts up slightly as you scroll
+  // Hero title parallax — drifts upward smoothly
   const heroTitle = document.querySelector('.avion-glitch-text');
   if (heroTitle) {
     const heroSection = document.querySelector('.hero');
     const heroRect = heroSection.getBoundingClientRect();
     if (heroRect.bottom > 0) {
       const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
-      heroTitle.style.transform = `translateY(${ratio * 60}px) scale(${1 - ratio * 0.08})`;
-      heroTitle.style.opacity = `${1 - ratio * 0.7}`;
+      heroTitle.style.transform = `translate3d(0, ${ratio * 70}px, 0) scale(${1 - ratio * 0.08})`;
+      heroTitle.style.opacity = `${1 - ratio * 0.75}`;
     }
   }
 
-  // Telemetry panel parallax
+  // Telemetry radar HUD box parallax
   const telemetryPanel = document.querySelector('.hero-telemetry-panel');
   if (telemetryPanel) {
     const heroSection = document.querySelector('.hero');
     const heroRect = heroSection.getBoundingClientRect();
     if (heroRect.bottom > 0) {
       const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
-      telemetryPanel.style.transform = `translateY(${ratio * 40}px)`;
-      telemetryPanel.style.opacity = `${1 - ratio * 0.5}`;
+      telemetryPanel.style.transform = `translate3d(0, ${ratio * 45}px, 0)`;
+      telemetryPanel.style.opacity = `${1 - ratio * 0.55}`;
     }
   }
 
@@ -118,7 +118,7 @@ function updateParallax(scrollY) {
     const viewH = window.innerHeight;
     if (rect.top < viewH && rect.bottom > 0) {
       const ratio = (viewH - rect.top) / (viewH + rect.height);
-      signalWave.style.transform = `translate3d(${ratio * 3}%, ${ratio * -20}px, 0) scale(${1 + ratio * 0.04})`;
+      signalWave.style.transform = `translate3d(${ratio * 4}%, ${ratio * -25}px, 0) scale(${1 + ratio * 0.05})`;
     }
   }
 
@@ -130,8 +130,8 @@ function updateParallax(scrollY) {
     const heroRect = heroSection.getBoundingClientRect();
     if (heroRect.bottom > 0) {
       const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
-      wingL.style.transform = `scaleX(${1 + ratio * 0.5})`;
-      wingR.style.transform = `scaleX(${1 + ratio * 0.5})`;
+      wingL.style.transform = `scaleX(${1 + ratio * 0.6})`;
+      wingR.style.transform = `scaleX(${1 + ratio * 0.6})`;
     }
   }
 }
@@ -150,7 +150,7 @@ if ('IntersectionObserver' in window && !reduceMotion) {
         entry.target.classList.remove('is-visible');
       }
     });
-  }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.06, rootMargin: '0px 0px -50px 0px' });
   revealItems.forEach(item => revealObserver.observe(item));
 } else {
   revealItems.forEach(item => item.classList.add('is-visible'));
@@ -181,16 +181,17 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
   cards.forEach(card => {
     let tiltRAF;
     card.addEventListener('mousemove', (e) => {
+      if (card.classList.contains('is-stacked') || card.classList.contains('is-stacked-deep')) return;
+
       cancelAnimationFrame(tiltRAF);
       tiltRAF = requestAnimationFrame(() => {
         const rect = card.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        const tiltX = y * -6;  // degrees
-        const tiltY = x * 6;
-        card.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.015)`;
+        const tiltX = y * -8;
+        const tiltY = x * 8;
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
 
-        // Spotlight glow follows cursor
         card.style.setProperty('--spot-x', `${(x + 0.5) * 100}%`);
         card.style.setProperty('--spot-y', `${(y + 0.5) * 100}%`);
       });
@@ -198,9 +199,11 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
 
     card.addEventListener('mouseleave', () => {
       cancelAnimationFrame(tiltRAF);
+      card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
       card.style.transform = '';
       card.style.removeProperty('--spot-x');
       card.style.removeProperty('--spot-y');
+      setTimeout(() => { card.style.transition = ''; }, 500);
     });
   });
 }
@@ -215,10 +218,12 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
       const rect = btn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.2}px, ${y * 0.3}px)`;
+      btn.style.transform = `translate(${x * 0.28}px, ${y * 0.35}px)`;
     });
     btn.addEventListener('mouseleave', () => {
+      btn.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
       btn.style.transform = '';
+      setTimeout(() => { btn.style.transition = ''; }, 450);
     });
   });
 }
@@ -231,8 +236,8 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
   cursorGlow.className = 'cursor-glow';
   document.body.appendChild(cursorGlow);
 
-  let cursorX = 0, cursorY = 0;
-  let glowX = 0, glowY = 0;
+  let cursorX = window.innerWidth / 2, cursorY = window.innerHeight / 2;
+  let glowX = cursorX, glowY = cursorY;
 
   document.addEventListener('mousemove', (e) => {
     cursorX = e.clientX;
@@ -242,27 +247,34 @@ if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
   function animateCursorGlow() {
     glowX = lerp(glowX, cursorX, 0.12);
     glowY = lerp(glowY, cursorY, 0.12);
-    cursorGlow.style.transform = `translate(${glowX - 160}px, ${glowY - 160}px)`;
+    cursorGlow.style.transform = `translate(${glowX - 180}px, ${glowY - 180}px)`;
     requestAnimationFrame(animateCursorGlow);
   }
   animateCursorGlow();
+
+  // Highlight cursor on interactive hover targets
+  const interactiveTargets = document.querySelectorAll('a, button, .event-card, .carousel-item');
+  interactiveTargets.forEach(target => {
+    target.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+    target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+  });
 }
 
 /* ══════════════════════════════════════════════════════════════
-   7. SMOOTH COUNTER ANIMATION (Section eyebrows)
+   7. SMOOTH SCAN-LINE SWEEPS (Eyebrows, Badges, Labels)
    ══════════════════════════════════════════════════════════════ */
 if (!reduceMotion) {
-  const eyebrows = document.querySelectorAll('.eyebrow');
+  const scanTargets = document.querySelectorAll('.eyebrow, .case-index, .case-badge');
   if ('IntersectionObserver' in window) {
-    const eyebrowObserver = new IntersectionObserver((entries) => {
+    const scanObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('eyebrow-animate');
-          eyebrowObserver.unobserve(entry.target);
+          scanObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.5 });
-    eyebrows.forEach(e => eyebrowObserver.observe(e));
+    }, { threshold: 0.3 });
+    scanTargets.forEach(e => scanObserver.observe(e));
   }
 }
 
@@ -276,7 +288,7 @@ if (!reduceMotion) {
       entries.forEach(entry => {
         entry.target.classList.toggle('section-in-view', entry.isIntersecting);
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
     glowSections.forEach(s => glowObserver.observe(s));
   }
 }
@@ -442,33 +454,39 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 /* ══════════════════════════════════════════════════════════════
-   12. TEXT SCRAMBLE EFFECT ON HOVER (Section headings)
+   12. TEXT SCRAMBLE CYBER DECODER (Carousel, Titles, Badges)
    ══════════════════════════════════════════════════════════════ */
 if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
-  const scrambleChars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`01';
+  const scrambleChars = '01#%&*<>/[]{}~+-=';
 
   function scrambleText(el) {
+    if (el.dataset.scrambling === 'true') return;
+    el.dataset.scrambling = 'true';
     const original = el.dataset.originalText || el.textContent;
     el.dataset.originalText = original;
+
     let iteration = 0;
+    const totalIterations = original.length;
     const interval = setInterval(() => {
       el.textContent = original
         .split('')
         .map((char, i) => {
-          if (i < iteration) return original[i];
           if (char === ' ' || char === '\n') return char;
+          if (i < iteration) return original[i];
           return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
         })
         .join('');
+
       iteration += 1 / 2;
-      if (iteration >= original.length) {
+      if (iteration >= totalIterations) {
         clearInterval(interval);
         el.textContent = original;
+        el.dataset.scrambling = 'false';
       }
-    }, 25);
+    }, 28);
   }
 
-  document.querySelectorAll('.carousel-name').forEach(el => {
+  document.querySelectorAll('.carousel-name, .event-info h3 em, .case-badge, .main-nav a').forEach(el => {
     el.addEventListener('mouseenter', () => scrambleText(el));
   });
 }
@@ -487,5 +505,3 @@ if (!reduceMotion) {
     footerObserver.observe(footer);
   }
 }
-
-/* ── Register button — direct link, no JS handler needed ───── */
