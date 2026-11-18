@@ -1,10 +1,24 @@
-/* ── header scroll state, scroll direction & progress indicator ── */
+/* ══════════════════════════════════════════════════════════════
+   AVION Tech Events — Immersive Scroll & Interaction Engine
+   Parallax · Magnetic · Stagger · Tilt · Particle Trails
+   ══════════════════════════════════════════════════════════════ */
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Smooth lerp utility ─────────────────────────────────────── */
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+/* ══════════════════════════════════════════════════════════════
+   1. HEADER — scroll state, direction & progress
+   ══════════════════════════════════════════════════════════════ */
 const header = document.querySelector('.site-header');
 const progressBar = document.getElementById('scroll-progress');
 const stackCards = document.querySelectorAll('.event-card[data-stack-card]');
 
 let lastScrollY = window.scrollY;
 let isScrollTicking = false;
+let scrollVelocity = 0;
 
 function updateCardStacking() {
   if (!stackCards || stackCards.length < 2) return;
@@ -16,7 +30,6 @@ function updateCardStacking() {
   const rect2 = card2.getBoundingClientRect();
   const rect3 = card3 ? card3.getBoundingClientRect() : null;
 
-  // Thresholds based on header offset
   const card2Overlap = rect2.top <= rect1.top + 72;
   const card3Overlap = rect3 ? rect3.top <= rect2.top + 72 : false;
 
@@ -39,6 +52,7 @@ function updateCardStacking() {
 
 const updateScrollState = () => {
   const scrollY = window.scrollY;
+  scrollVelocity = Math.abs(scrollY - lastScrollY);
   const scrollDir = scrollY >= lastScrollY ? 'down' : 'up';
   document.documentElement.setAttribute('data-scroll-dir', scrollDir);
 
@@ -51,8 +65,8 @@ const updateScrollState = () => {
     progressBar.style.width = `${progress}%`;
   }
 
-  // Reactive Card Stacking
   updateCardStacking();
+  updateParallax(scrollY);
 
   lastScrollY = scrollY;
   isScrollTicking = false;
@@ -66,9 +80,66 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 updateScrollState();
 
-/* ── bidirectional reveal on scroll (reacts to both down and up scroll) ─ */
+/* ══════════════════════════════════════════════════════════════
+   2. SCROLL-DRIVEN PARALLAX SYSTEM
+   ══════════════════════════════════════════════════════════════ */
+function updateParallax(scrollY) {
+  if (reduceMotion) return;
+
+  // Hero title parallax — drifts up slightly as you scroll
+  const heroTitle = document.querySelector('.avion-glitch-text');
+  if (heroTitle) {
+    const heroSection = document.querySelector('.hero');
+    const heroRect = heroSection.getBoundingClientRect();
+    if (heroRect.bottom > 0) {
+      const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
+      heroTitle.style.transform = `translateY(${ratio * 60}px) scale(${1 - ratio * 0.08})`;
+      heroTitle.style.opacity = `${1 - ratio * 0.7}`;
+    }
+  }
+
+  // Telemetry panel parallax
+  const telemetryPanel = document.querySelector('.hero-telemetry-panel');
+  if (telemetryPanel) {
+    const heroSection = document.querySelector('.hero');
+    const heroRect = heroSection.getBoundingClientRect();
+    if (heroRect.bottom > 0) {
+      const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
+      telemetryPanel.style.transform = `translateY(${ratio * 40}px)`;
+      telemetryPanel.style.opacity = `${1 - ratio * 0.5}`;
+    }
+  }
+
+  // Signal wave parallax
+  const signalWave = document.querySelector('.signal-wave');
+  if (signalWave) {
+    const signalSection = document.querySelector('.signal-section');
+    const rect = signalSection.getBoundingClientRect();
+    const viewH = window.innerHeight;
+    if (rect.top < viewH && rect.bottom > 0) {
+      const ratio = (viewH - rect.top) / (viewH + rect.height);
+      signalWave.style.transform = `translate3d(${ratio * 3}%, ${ratio * -20}px, 0) scale(${1 + ratio * 0.04})`;
+    }
+  }
+
+  // HUD wings parallax on hero
+  const wingL = document.querySelector('.avion-wing--l');
+  const wingR = document.querySelector('.avion-wing--r');
+  if (wingL && wingR) {
+    const heroSection = document.querySelector('.hero');
+    const heroRect = heroSection.getBoundingClientRect();
+    if (heroRect.bottom > 0) {
+      const ratio = clamp(-heroRect.top / (heroRect.height || 1), 0, 1);
+      wingL.style.transform = `scaleX(${1 + ratio * 0.5})`;
+      wingR.style.transform = `scaleX(${1 + ratio * 0.5})`;
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3. ADVANCED SCROLL-REVEAL — staggered, directional, with scale
+   ══════════════════════════════════════════════════════════════ */
 const revealItems = document.querySelectorAll('.reveal');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 if ('IntersectionObserver' in window && !reduceMotion) {
   const revealObserver = new IntersectionObserver((entries) => {
@@ -76,17 +147,16 @@ if ('IntersectionObserver' in window && !reduceMotion) {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
       } else if (entry.boundingClientRect.top > window.innerHeight) {
-        // Scrolled back up above this item
         entry.target.classList.remove('is-visible');
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
   revealItems.forEach(item => revealObserver.observe(item));
 } else {
   revealItems.forEach(item => item.classList.add('is-visible'));
 }
 
-/* ── acronym word-by-word scroll reveal (bidirectional) ───── */
+/* ── Acronym word-by-word staggered reveal ─────────────────── */
 const acronymWords = document.querySelectorAll('.reveal-word');
 if ('IntersectionObserver' in window && !reduceMotion) {
   const wordObserver = new IntersectionObserver((entries) => {
@@ -103,8 +173,117 @@ if ('IntersectionObserver' in window && !reduceMotion) {
   acronymWords.forEach(word => word.classList.add('is-visible'));
 }
 
-/* ── Android/Mobile Video Viewport Optimizer ──────────────── */
-// Automatically pauses off-screen card videos to eliminate lag and conserve battery
+/* ══════════════════════════════════════════════════════════════
+   4. CARD 3D TILT ON HOVER (Desktop only)
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const cards = document.querySelectorAll('.event-card');
+  cards.forEach(card => {
+    let tiltRAF;
+    card.addEventListener('mousemove', (e) => {
+      cancelAnimationFrame(tiltRAF);
+      tiltRAF = requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        const tiltX = y * -6;  // degrees
+        const tiltY = x * 6;
+        card.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.015)`;
+
+        // Spotlight glow follows cursor
+        card.style.setProperty('--spot-x', `${(x + 0.5) * 100}%`);
+        card.style.setProperty('--spot-y', `${(y + 0.5) * 100}%`);
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      cancelAnimationFrame(tiltRAF);
+      card.style.transform = '';
+      card.style.removeProperty('--spot-x');
+      card.style.removeProperty('--spot-y');
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. MAGNETIC BUTTON EFFECT (Register CTA)
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const magneticBtns = document.querySelectorAll('.register-button');
+  magneticBtns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.2}px, ${y * 0.3}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. CUSTOM CURSOR GLOW TRAIL (Desktop only)
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const cursorGlow = document.createElement('div');
+  cursorGlow.className = 'cursor-glow';
+  document.body.appendChild(cursorGlow);
+
+  let cursorX = 0, cursorY = 0;
+  let glowX = 0, glowY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+  }, { passive: true });
+
+  function animateCursorGlow() {
+    glowX = lerp(glowX, cursorX, 0.12);
+    glowY = lerp(glowY, cursorY, 0.12);
+    cursorGlow.style.transform = `translate(${glowX - 160}px, ${glowY - 160}px)`;
+    requestAnimationFrame(animateCursorGlow);
+  }
+  animateCursorGlow();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. SMOOTH COUNTER ANIMATION (Section eyebrows)
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion) {
+  const eyebrows = document.querySelectorAll('.eyebrow');
+  if ('IntersectionObserver' in window) {
+    const eyebrowObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('eyebrow-animate');
+          eyebrowObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    eyebrows.forEach(e => eyebrowObserver.observe(e));
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8. SECTION BORDER GLOW ON SCROLL INTO VIEW
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion) {
+  const glowSections = document.querySelectorAll('.events-section, .signal-section, .cta-section, .acronym-section');
+  if ('IntersectionObserver' in window) {
+    const glowObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('section-in-view', entry.isIntersecting);
+      });
+    }, { threshold: 0.15 });
+    glowSections.forEach(s => glowObserver.observe(s));
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   9. VIDEO VIEWPORT OPTIMIZER
+   ══════════════════════════════════════════════════════════════ */
 const cardVideos = document.querySelectorAll('.card-video');
 if ('IntersectionObserver' in window && !reduceMotion) {
   const videoObserver = new IntersectionObserver((entries) => {
@@ -138,7 +317,9 @@ if ('IntersectionObserver' in window && !reduceMotion) {
   cardVideos.forEach(vid => vid.play().catch(() => {}));
 }
 
-/* ── CASE INFORMATION DATA (Focused text briefing) ───────── */
+/* ══════════════════════════════════════════════════════════════
+   10. CASE DATA & MODAL
+   ══════════════════════════════════════════════════════════════ */
 const CASES = {
   eclipse: {
     tag: 'CASE // 01 · CLASSIFIED INCIDENT',
@@ -163,7 +344,6 @@ const CASES = {
   }
 };
 
-/* ── MODAL INTERACTION LOGIC (Information Sheet) ──────────── */
 const modal = document.getElementById('case-modal');
 const modalCaseTag = document.getElementById('modal-case-tag');
 const modalTitle = document.getElementById('modal-title');
@@ -202,7 +382,6 @@ function closeCaseModal() {
   }
 }
 
-// Attach event card and carousel item click and keyboard handlers
 const interactiveCaseTriggers = document.querySelectorAll('.event-card, .carousel-item[data-case]');
 interactiveCaseTriggers.forEach(el => {
   const caseKey = el.dataset.case;
@@ -219,21 +398,19 @@ interactiveCaseTriggers.forEach(el => {
 if (modalClose) modalClose.addEventListener('click', closeCaseModal);
 if (modalDismiss) modalDismiss.addEventListener('click', closeCaseModal);
 
-// Close on clicking backdrop
 if (modal) {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeCaseModal();
   });
 }
 
-// Close on Escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
     closeCaseModal();
   }
 });
 
-// Mobile swipe-down to dismiss bottom sheet
+// Mobile swipe-down to dismiss
 let touchStartY = 0;
 const modalCard = document.querySelector('.modal-card');
 if (modalCard) {
@@ -244,7 +421,6 @@ if (modalCard) {
   modalCard.addEventListener('touchmove', (e) => {
     const currentY = e.touches[0].clientY;
     const diff = currentY - touchStartY;
-    // Only dismiss if dragged downwards from the top of the card
     const modalContent = document.querySelector('.modal-content');
     if (diff > 80 && modalContent && modalContent.scrollTop <= 0) {
       closeCaseModal();
@@ -252,6 +428,64 @@ if (modalCard) {
   }, { passive: true });
 }
 
-/* ── register button handler ─────────────────────────────── */
-/* Register buttons are now direct <a> links to the Google Form.
-   No JS handler needed — the browser follows the href natively. */
+/* ══════════════════════════════════════════════════════════════
+   11. SMOOTH SCROLL ANCHOR LINKS
+   ══════════════════════════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+/* ══════════════════════════════════════════════════════════════
+   12. TEXT SCRAMBLE EFFECT ON HOVER (Section headings)
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const scrambleChars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`01';
+
+  function scrambleText(el) {
+    const original = el.dataset.originalText || el.textContent;
+    el.dataset.originalText = original;
+    let iteration = 0;
+    const interval = setInterval(() => {
+      el.textContent = original
+        .split('')
+        .map((char, i) => {
+          if (i < iteration) return original[i];
+          if (char === ' ' || char === '\n') return char;
+          return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+        })
+        .join('');
+      iteration += 1 / 2;
+      if (iteration >= original.length) {
+        clearInterval(interval);
+        el.textContent = original;
+      }
+    }, 25);
+  }
+
+  document.querySelectorAll('.carousel-name').forEach(el => {
+    el.addEventListener('mouseenter', () => scrambleText(el));
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   13. FOOTER STAGGER REVEAL
+   ══════════════════════════════════════════════════════════════ */
+if (!reduceMotion) {
+  const footer = document.querySelector('.site-footer');
+  if (footer && 'IntersectionObserver' in window) {
+    const footerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        footer.classList.toggle('footer-visible', entry.isIntersecting);
+      });
+    }, { threshold: 0.2 });
+    footerObserver.observe(footer);
+  }
+}
+
+/* ── Register button — direct link, no JS handler needed ───── */
