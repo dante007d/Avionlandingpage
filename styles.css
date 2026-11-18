@@ -706,25 +706,53 @@ img, video { display: block; max-width: 100%; }
 .signal-section {
   position: relative;
   z-index: 1;
-  min-height: 460px;
+  min-height: 520px;
   display: flex;
   align-items: center;
   overflow: hidden;
   border-block: 1px solid rgba(233 226 230 / .18);
-  background: radial-gradient(ellipse at 65% 65%, rgba(179 152 165 / .09), transparent 50%), #0c0d10;
+  background: #090a0c;
+}
+.signal-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.signal-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: translateZ(0);
+  will-change: transform;
+  filter: contrast(1.1) brightness(0.85) saturate(1.15);
+}
+.signal-video-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(9, 10, 12, 0.45) 0%, rgba(9, 10, 12, 0.8) 68%, rgba(9, 10, 12, 0.98) 100%),
+    linear-gradient(180deg, rgba(9, 10, 12, 0.88) 0%, rgba(9, 10, 12, 0.25) 25%, rgba(9, 10, 12, 0.25) 75%, rgba(9, 10, 12, 0.95) 100%);
+  pointer-events: none;
 }
 .signal-scanlines {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.18),
-    rgba(0, 0, 0, 0.18) 1px,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 1px,
     transparent 1px,
     transparent 3px
   );
   pointer-events: none;
-  opacity: 0.65;
+  opacity: 0.55;
   z-index: 1;
 }
 .signal-wave {
@@ -734,10 +762,11 @@ img, video { display: block; max-width: 100%; }
   object-fit: cover;
   pointer-events: none;
   mix-blend-mode: screen;
-  opacity: .28;
+  opacity: .18;
   animation: wave-float 17s ease-in-out infinite alternate-reverse;
   mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
+  z-index: 1;
 }
 @keyframes wave-float { to { transform: translate3d(2%, -6px, 0) scale(1.02); opacity: .5; } }
 

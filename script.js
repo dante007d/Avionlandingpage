@@ -104,8 +104,8 @@ if ('IntersectionObserver' in window && !reduceMotion) {
 }
 
 /* ── Android/Mobile Video Viewport Optimizer ──────────────── */
-// Automatically pauses off-screen card videos to eliminate lag and conserve battery
-const cardVideos = document.querySelectorAll('.card-video');
+// Automatically pauses off-screen videos to eliminate lag and conserve battery
+const ambientVideos = document.querySelectorAll('.card-video, .signal-video');
 if ('IntersectionObserver' in window && !reduceMotion) {
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -127,15 +127,15 @@ if ('IntersectionObserver' in window && !reduceMotion) {
     });
   }, { threshold: 0.15 });
 
-  cardVideos.forEach(vid => videoObserver.observe(vid));
+  ambientVideos.forEach(vid => videoObserver.observe(vid));
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
-      cardVideos.forEach(v => v.pause());
+      ambientVideos.forEach(v => v.pause());
     }
   });
 } else {
-  cardVideos.forEach(vid => vid.play().catch(() => {}));
+  ambientVideos.forEach(vid => vid.play().catch(() => {}));
 }
 
 /* ── CASE INFORMATION DATA (Focused text briefing) ───────── */
