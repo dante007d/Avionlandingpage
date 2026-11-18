@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="torus-knot.js" defer></script>
     <script src="led-scroller.js" defer></script>
+    <script src="signal-dither.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -163,8 +164,11 @@
 
       <!-- ═══ Signal with Cyber Glitch & Hologram FX ═══ -->
       <section class="signal-section" id="signal">
+        <div class="signal-dither-wrap" aria-hidden="true">
+          <canvas id="signal-dither-canvas" class="signal-dither-canvas"></canvas>
+          <div class="signal-dither-overlay"></div>
+        </div>
         <div class="signal-scanlines" aria-hidden="true"></div>
-        <img class="wave-grid signal-wave" src="assets/wave-grid.svg" alt="" aria-hidden="true" />
         
         <div class="signal-copy section-shell reveal">
           <h2 class="glitch-heading" data-text="Think beyond. Make your move.">

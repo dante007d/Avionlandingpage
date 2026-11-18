@@ -640,7 +640,29 @@ img, video { display: block; max-width: 100%; }
   align-items: center;
   overflow: hidden;
   border-block: 1px solid rgba(233 226 230 / .18);
-  background: radial-gradient(ellipse at 65% 65%, rgba(179 152 165 / .09), transparent 50%), #0c0d10;
+  background: #0c0d10;
+}
+.signal-dither-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: auto;
+}
+.signal-dither-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.signal-dither-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 40% 50%, rgba(12, 13, 16, 0.35) 0%, rgba(12, 13, 16, 0.78) 65%, rgba(12, 13, 16, 0.97) 100%),
+    linear-gradient(180deg, rgba(12, 13, 16, 0.85) 0%, transparent 22%, transparent 78%, rgba(12, 13, 16, 0.98) 100%);
+  pointer-events: none;
 }
 .signal-scanlines {
   position: absolute;
@@ -653,22 +675,9 @@ img, video { display: block; max-width: 100%; }
     transparent 3px
   );
   pointer-events: none;
-  opacity: 0.65;
+  opacity: 0.55;
   z-index: 1;
 }
-.signal-wave {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: .28;
-  animation: wave-float 17s ease-in-out infinite alternate-reverse;
-  mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24%, #000 100%);
-}
-@keyframes wave-float { to { transform: translate3d(2%, -6px, 0) scale(1.02); opacity: .5; } }
 
 .signal-copy {
   position: relative;
@@ -710,10 +719,13 @@ img, video { display: block; max-width: 100%; }
   text-transform: uppercase;
   margin: 18px 0 26px;
   user-select: none;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 0 35px rgba(0, 0, 0, 0.85);
 }
-.glitch-heading em {
+.glitch-heading em.glitch-accent {
   font-style: normal;
-  color: #c9b8c1;
+  color: #e2ccd6;
+  text-shadow: 0 0 24px rgba(217, 191, 200, 0.4), 0 4px 18px rgba(0, 0, 0, 0.95);
 }
 
 .glitch-line {
@@ -767,12 +779,20 @@ img, video { display: block; max-width: 100%; }
   flex-direction: column;
   gap: 16px;
   max-width: 580px;
+  background: rgba(12, 13, 16, 0.76);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 20px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(233, 226, 230, 0.22);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
 }
 .signal-text {
   margin: 0;
-  color: #c5bcc2;
+  color: #ede8ea;
   font: 400 clamp(14px, 1.8vw, 17px) / 1.8 var(--sans);
   letter-spacing: .02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 .signal-hud-specs {
   display: flex;
