@@ -255,3 +255,26 @@ if (modalCard) {
 /* ── register button handler ─────────────────────────────── */
 /* Register buttons are now direct <a> links to the Google Form.
    No JS handler needed — the browser follows the href natively. */
+
+/* ── AVION Hologram 3D Perspective Hover Tracker ──────────── */
+const brandLogo = document.getElementById('hero-brand-logo');
+if (brandLogo && !reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const heroSection = document.querySelector('.hero');
+  if (heroSection) {
+    let brandRAF;
+    heroSection.addEventListener('mousemove', (e) => {
+      cancelAnimationFrame(brandRAF);
+      brandRAF = requestAnimationFrame(() => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        brandLogo.style.transform = `perspective(900px) rotateX(${y * -8}deg) rotateY(${x * 10}deg) scale(1.02)`;
+      });
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      cancelAnimationFrame(brandRAF);
+      brandLogo.style.transform = '';
+    });
+  }
+}
