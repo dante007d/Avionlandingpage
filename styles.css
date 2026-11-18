@@ -82,7 +82,54 @@ img, video { display: block; max-width: 100%; }
   border-color: rgba(233 226 230 / .32);
   background: rgba(9 10 11 / .92);
 }
-/* ── Brand LED Matrix Banner Link ───────────────────────────── */
+/* ── Brand LED Matrix Banner Link & Organizer Badge ─────────── */
+.header-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-org-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(233, 226, 230, 0.14);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.header-org-badge:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(217, 191, 200, 0.35);
+  box-shadow: 0 0 16px rgba(217, 191, 200, 0.12);
+}
+.header-org-logo {
+  display: block;
+  object-fit: contain;
+  filter: brightness(0.96) contrast(1.05);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.header-org-logo--bvvs {
+  height: 26px;
+  width: auto;
+}
+.header-org-logo--ieee {
+  height: 15px;
+  width: auto;
+  max-width: 82px;
+}
+.header-org-badge:hover .header-org-logo {
+  filter: brightness(1.1);
+}
+.header-org-sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(233, 226, 230, 0.18);
+}
+
 .brand-led-link {
   display: flex;
   align-items: center;
@@ -1374,19 +1421,97 @@ img, video { display: block; max-width: 100%; }
 .site-footer {
   position: relative;
   z-index: 1;
-  padding: 26px 0 30px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  align-items: center;
-  gap: 12px;
+  padding: 32px 0 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
   background: var(--black);
+  border-top: 1px solid var(--line);
 }
+
+.footer-top-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px 32px;
+}
+
 .footer-brand .brand-name { font-size: 20px; }
 .footer-brand .brand-sub  { font-size: 7px; }
+
+.footer-org-unit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.footer-org-tag {
+  font: 600 8px var(--mono);
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.footer-org-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(233, 226, 230, 0.14);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+.footer-org-lockup:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(217, 191, 200, 0.35);
+  box-shadow: 0 0 20px rgba(217, 191, 200, 0.12);
+}
+.footer-org-logo {
+  display: block;
+  object-fit: contain;
+  filter: brightness(0.96) contrast(1.05);
+  transition: filter 0.2s ease;
+}
+.footer-org-logo--bvvs {
+  height: 36px;
+  width: auto;
+}
+.footer-org-logo--ieee {
+  height: 18px;
+  width: auto;
+  max-width: 110px;
+}
+.footer-org-lockup:hover .footer-org-logo {
+  filter: brightness(1.1);
+}
+.footer-org-sep {
+  width: 1px;
+  height: 22px;
+  background: rgba(233, 226, 230, 0.18);
+}
+
 .footer-copy, .copyright, .back-top { font: 500 8px var(--mono); letter-spacing: .08em; color: #817a7f; }
 .back-top { text-align: center; transition: color .2s; }
 .back-top:hover { color: #fff; }
 .back-top span { color: #ded1d8; margin-left: 7px; font-size: 13px; }
+
+.footer-bottom-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid rgba(233, 226, 230, 0.1);
+  font: 500 8px var(--mono);
+  color: #797378;
+  letter-spacing: 0.08em;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-affiliation {
+  color: #8c858a;
+}
 .copyright { text-align: right; }
 
 /* ── toast ───────────────────────────────────────────────────── */
@@ -1443,9 +1568,18 @@ img, video { display: block; max-width: 100%; }
 @media (max-width: 680px) {
   html { scroll-padding-top: 72px; }
   .site-header { height: 72px; }
-  #nav-led-canvas { width: 160px; height: 28px; }
-  .main-nav { gap: 16px; }
-  .main-nav a { font-size: 9px; }
+  .header-brand-group { gap: 10px; }
+  #nav-led-canvas { width: 140px; height: 25px; }
+  .header-org-badge {
+    padding: 3px 8px;
+    gap: 7px;
+    border-radius: 5px;
+  }
+  .header-org-logo--bvvs { height: 21px; }
+  .header-org-logo--ieee { height: 12px; max-width: 60px; }
+  .header-org-sep { height: 13px; }
+  .main-nav { gap: 14px; }
+  .main-nav a { font-size: 8.5px; }
   .header-meta { display: none; }
 
   .hero { min-height: calc(100svh - 72px); }
@@ -1625,17 +1759,46 @@ img, video { display: block; max-width: 100%; }
   .cta-title { font-size: clamp(38px, 10vw, 64px); }
   .register-button { width: 100%; justify-content: center; }
 
-  .site-footer { grid-template-columns: 1fr auto; gap: 18px; }
-  .footer-copy { grid-column: 1; }
-  .back-top { grid-column: 2; grid-row: 1; }
-  .copyright { grid-column: 1 / -1; text-align: left; border-top: 1px solid rgba(233 226 230 / .12); padding-top: 14px; }
+  .site-footer {
+    padding: 28px 0 32px;
+    gap: 18px;
+  }
+  .footer-top-grid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .footer-org-unit {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .footer-org-lockup {
+    padding: 4px 12px;
+    gap: 10px;
+  }
+  .footer-org-logo--bvvs { height: 30px; }
+  .footer-org-logo--ieee { height: 15px; max-width: 90px; }
+  .footer-org-sep { height: 18px; }
+  .footer-bottom-grid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .copyright { text-align: left; }
 }
 
 /* ── small phones ────────────────────────────────────────────── */
 @media (max-width: 410px) {
   :root { --gutter: 16px; }
-  .main-nav { gap: 12px; }
-  .main-nav a { font-size: 8px; }
+  .header-brand-group { gap: 8px; }
+  #nav-led-canvas { width: 120px; height: 22px; }
+  .header-org-badge { padding: 2px 6px; gap: 5px; }
+  .header-org-logo--bvvs { height: 18px; }
+  .header-org-logo--ieee { height: 11px; max-width: 50px; }
+  .main-nav { gap: 10px; }
+  .main-nav a { font-size: 7.5px; }
   .hero-title { font-size: 48px; }
   .acronym-word { font-size: 20px; }
   .event-card { grid-template-columns: 1fr; min-height: 0; }

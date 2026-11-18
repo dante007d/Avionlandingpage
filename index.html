@@ -21,9 +21,16 @@
     <div id="scroll-progress" class="scroll-progress-bar" aria-hidden="true"></div>
 
     <header class="site-header" id="top">
-      <a class="brand-led-link" href="#top" aria-label="AVION Tech Events home">
-        <canvas id="nav-led-canvas" width="220" height="36" aria-label="AVION LED banner"></canvas>
-      </a>
+      <div class="header-brand-group">
+        <a class="brand-led-link" href="#top" aria-label="AVION Tech Events home">
+          <canvas id="nav-led-canvas" width="220" height="36" aria-label="AVION LED banner"></canvas>
+        </a>
+        <div class="header-org-badge" aria-label="Organized by BVVS and BEC IEEE">
+          <img src="assets/logo-bvvs.png" alt="BVVS" class="header-org-logo header-org-logo--bvvs" width="26" height="33" />
+          <span class="header-org-sep" aria-hidden="true"></span>
+          <img src="assets/logo-bec-ieee.png" alt="BEC IEEE" class="header-org-logo header-org-logo--ieee" width="76" height="16" />
+        </div>
+      </div>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="#events">Events <span>03</span></a>
         <a href="#signal">The signal</a>
@@ -293,10 +300,30 @@
     </main>
 
     <footer class="site-footer section-shell">
-      <a class="brand footer-brand" href="#top"><span class="brand-name">AVION</span><span class="brand-sub">TECH EVENTS <i>/</i> 03</span></a>
-      <span class="footer-copy">THREE CHALLENGES. ONE ARENA.</span>
-      <a class="back-top" href="#top">BACK TO TOP <span>↑</span></a>
-      <span class="copyright">AVION FIELD NOTES / 2026</span>
+      <div class="footer-top-grid">
+        <a class="brand footer-brand" href="#top">
+          <span class="brand-name">AVION</span>
+          <span class="brand-sub">TECH EVENTS <i>/</i> 03</span>
+        </a>
+
+        <!-- Organizers Badge Unit -->
+        <div class="footer-org-unit" aria-label="Organized by BVVS and BEC IEEE Student Branch">
+          <span class="footer-org-tag">ORGANIZED BY</span>
+          <div class="footer-org-lockup">
+            <img src="assets/logo-bvvs.png" alt="BVVS Bagalkote" class="footer-org-logo footer-org-logo--bvvs" width="38" height="48" />
+            <span class="footer-org-sep" aria-hidden="true"></span>
+            <img src="assets/logo-bec-ieee.png" alt="BEC IEEE Student Branch" class="footer-org-logo footer-org-logo--ieee" width="115" height="24" />
+          </div>
+        </div>
+
+        <span class="footer-copy">THREE CHALLENGES. ONE ARENA.</span>
+        <a class="back-top" href="#top">BACK TO TOP <span>↑</span></a>
+      </div>
+
+      <div class="footer-bottom-grid">
+        <span class="footer-affiliation">Basaveshwar Engineering College (Autonomous), Bagalkote · BEC IEEE Student Branch</span>
+        <span class="copyright">AVION FIELD NOTES / 2026</span>
+      </div>
     </footer>
 
     <!-- ═══ Pure Information Sheet (Optimised for Mobile & Android) ═══ -->
