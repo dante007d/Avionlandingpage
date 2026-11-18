@@ -252,16 +252,6 @@ if (modalCard) {
   }, { passive: true });
 }
 
-/* ── register button handler (bottom CTA & modal) ─────────── */
-const toast = document.querySelector('#register-toast');
-let toastTimer;
-
-document.querySelectorAll('[data-register]').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toast.textContent = 'Registration portal / opening soon';
-    toast.classList.add('is-visible');
-    window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => toast.classList.remove('is-visible'), 2600);
-  });
-});
+/* ── register button handler ─────────────────────────────── */
+/* Register buttons are now direct <a> links to the Google Form.
+   No JS handler needed — the browser follows the href natively. */
