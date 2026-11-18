@@ -317,27 +317,6 @@ img, video { display: block; max-width: 100%; }
   animation: brand-glitch-magenta 3.6s infinite linear alternate-reverse;
 }
 
-.brand-scan-sweep {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.16) 50%,
-    transparent 100%
-  );
-  background-size: 100% 200%;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  animation: brand-scan-loop 4.2s ease-in-out infinite;
-}
-
-@keyframes brand-scan-loop {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
-
 @keyframes brand-glitch-cyan {
   0%, 82%, 100% { clip-path: inset(50% 0 50% 0); transform: translate(0); }
   83% { clip-path: inset(16% 0 66% 0); transform: translate(-4px, 1px); }
