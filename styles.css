@@ -205,6 +205,63 @@ video {
   border-radius: 4px;
 }
 
+.header-org-link,
+.footer-org-link,
+.bec-ieee-logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-org-link:hover,
+.footer-org-link:hover,
+.bec-ieee-logo-link:hover {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+.header-action {
+  display: flex;
+  align-items: center;
+}
+
+.header-register-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 132, 71, 0.12);
+  border: 1px solid rgba(255, 132, 71, 0.45);
+  border-radius: 4px;
+  font: 600 11px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffb347;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 12px rgba(255, 132, 71, 0.15);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-register-btn:hover {
+  background: rgba(255, 132, 71, 0.24);
+  border-color: #ff8447;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(255, 132, 71, 0.4);
+}
+
+.header-register-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.header-register-btn:hover svg {
+  transform: translate(2px, -2px);
+}
+
 .main-nav {
   display: flex;
   align-items: center;
@@ -2003,6 +2060,12 @@ video {
     max-width: 70px;
   }
 
+  .header-register-btn {
+    padding: 7px 14px;
+    font-size: 10px;
+    gap: 6px;
+  }
+
   .main-nav {
     gap: 22px;
   }
@@ -2063,6 +2126,18 @@ video {
 
   .header-org-sep {
     height: 13px;
+  }
+
+  .header-register-btn {
+    padding: 5px 10px;
+    font-size: 8.5px;
+    gap: 4px;
+    letter-spacing: 0.08em;
+  }
+
+  .header-register-btn svg {
+    width: 10px;
+    height: 10px;
   }
 
   .main-nav {
@@ -2599,6 +2674,119 @@ video {
 
 
 /* ══════════════════════════════════════════════════════════════
+   BEC IEEE STUDENT BRANCH SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+.bec-ieee-section {
+  padding: clamp(40px, 6vw, 72px) 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.bec-ieee-card {
+  position: relative;
+  border: 1px solid rgba(233, 226, 230, 0.12);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(20, 16, 26, 0.85) 0%, rgba(13, 11, 18, 0.94) 100%);
+  padding: clamp(24px, 4vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bec-ieee-card:hover {
+  border-color: rgba(255, 179, 71, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 30px rgba(255, 179, 71, 0.08);
+}
+
+.bec-ieee-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(233, 226, 230, 0.08);
+}
+
+.bec-ieee-logo {
+  display: block;
+  height: 28px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  filter: brightness(0.96);
+  transition: filter 0.2s ease;
+}
+
+.bec-ieee-logo-link:hover .bec-ieee-logo {
+  filter: brightness(1.15);
+}
+
+.bec-ieee-branch-tag {
+  font: 600 10px var(--mono);
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  background: rgba(255, 132, 71, 0.1);
+  border: 1px solid rgba(255, 132, 71, 0.25);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.bec-ieee-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bec-ieee-heading {
+  font: 700 clamp(1.3rem, 2.8vw, 1.9rem) var(--sans);
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.bec-ieee-desc {
+  font: 400 clamp(13.5px, 1.4vw, 15px) / 1.75 var(--sans);
+  color: #c9c3ce;
+  max-width: 72ch;
+  margin: 0;
+}
+
+.bec-ieee-action {
+  margin-top: 6px;
+}
+
+.bec-ieee-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 11px var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffb347;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(233, 226, 230, 0.16);
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.bec-ieee-btn:hover {
+  background: rgba(255, 132, 71, 0.15);
+  border-color: rgba(255, 132, 71, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
    INTERACTIVE EVENT SCHEDULE SECTION
    ══════════════════════════════════════════════════════════════ */
 
@@ -2970,7 +3158,7 @@ video {
 }
 
 .tl-card.is-expanded .tl-expand {
-  max-height: 400px;
+  max-height: 600px;
   opacity: 1;
 }
 

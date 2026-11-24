@@ -10,11 +10,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Syncopate:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=2.6" />
-    <script src="torus-knot.js?v=2.6" defer></script>
-    <script src="led-scroller.js?v=2.6" defer></script>
-    <script src="card-dither.js?v=2.6" defer></script>
-    <script src="script.js?v=2.6" defer></script>
+    <link rel="stylesheet" href="styles.css?v=2.7" />
+    <script src="torus-knot.js?v=2.7" defer></script>
+    <script src="led-scroller.js?v=2.7" defer></script>
+    <script src="card-dither.js?v=2.7" defer></script>
+    <script src="script.js?v=2.7" defer></script>
   </head>
   <body>
     <!-- Real-time scroll indicator -->
@@ -28,14 +28,17 @@
         <div class="header-org-badge" aria-label="Organized by BVVS and BEC IEEE">
           <img src="assets/logo-bvvs.png" alt="BVVS" class="header-org-logo header-org-logo--bvvs" width="26" height="33" />
           <span class="header-org-sep" aria-hidden="true"></span>
-          <img src="assets/logo-bec-ieee.png" alt="BEC IEEE" class="header-org-logo header-org-logo--ieee" width="76" height="16" />
+          <a href="https://www.becieee.org/" target="_blank" rel="noopener noreferrer" class="header-org-link" aria-label="BEC IEEE Official Website">
+            <img src="assets/logo-bec-ieee.png" alt="BEC IEEE" class="header-org-logo header-org-logo--ieee" width="76" height="16" />
+          </a>
         </div>
       </div>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="#events">Events <span>03</span></a>
-        <a href="#schedule">Schedule</a>
-        <a href="#signal">The signal</a>
-      </nav>
+      <div class="header-action">
+        <a class="header-register-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScW7KL_vRKqCBmTYLalwBW6UvlXmxyEDCJ2xweAR-9OCRe-hw/viewform" target="_blank" rel="noopener noreferrer">
+          <span>REGISTER</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
       <div class="header-meta"><span class="live-dot"></span> SYSTEM OPEN</div>
     </header>
 
@@ -183,14 +186,27 @@
         <div class="events-bottom"><span>TAP ANY CARD TO VIEW DETAILS</span><span class="events-line"></span><span>01 — 03</span></div>
       </section>
 
-      <!-- ═══ Signal with Cyber Glitch & Hologram FX ═══ -->
-      </section>
-
       <!-- ═══ BEC IEEE Section ═══ -->
       <section class="bec-ieee-section" aria-labelledby="bec-ieee-title">
         <div class="section-shell">
-          <h2 id="bec-ieee-title" class="section-title">IEEE Student Branch</h2>
-          <p class="section-intro">Advancing technology for humanity — the BEC‑IEEE Student Branch (STB35261), established in January 1994 and an entity of the IEEE North Karnataka Sub‑Section under the IEEE Bangalore Section, IEEE Region 10.</p>
+          <div class="bec-ieee-card reveal">
+            <div class="bec-ieee-card-top">
+              <a href="https://www.becieee.org/" target="_blank" rel="noopener noreferrer" class="bec-ieee-logo-link" aria-label="Visit BEC IEEE Official Website">
+                <img src="assets/logo-bec-ieee.png" alt="BEC IEEE Student Branch" class="bec-ieee-logo" width="160" height="34" />
+              </a>
+              <span class="bec-ieee-branch-tag">STB35261 · EST. 1994</span>
+            </div>
+            <div class="bec-ieee-content">
+              <h2 id="bec-ieee-title" class="bec-ieee-heading">BEC IEEE Student Branch</h2>
+              <p class="bec-ieee-desc">Advancing technology for humanity — the BEC‑IEEE Student Branch (STB35261), established in January 1994 and an entity of the IEEE North Karnataka Sub‑Section under the IEEE Bangalore Section, IEEE Region 10.</p>
+              <div class="bec-ieee-action">
+                <a href="https://www.becieee.org/" target="_blank" rel="noopener noreferrer" class="bec-ieee-btn">
+                  <span>Visit becieee.org</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       <!-- ═══ Interactive Event Schedule ═══ -->
@@ -397,181 +413,6 @@
         <span class="signal-index">END OF TRANSMISSION / AVION 03</span>
       </section>
 
-      <!-- ═══ Interactive Event Schedule ═══ -->
-      <section class="schedule-section" id="schedule" aria-labelledby="schedule-title">
-        <div class="section-shell">
-
-          <div class="schedule-header reveal">
-            <p class="eyebrow"><span>FIELD ORDER</span><i></i> AVION 2026 · TIMELINE</p>
-            <h2 id="schedule-title">Event<br /><em>Schedule.</em></h2>
-            <p class="schedule-subtitle">Basaveshwar Engineering College · Classrooms 101–114</p>
-          </div>
-
-          <!-- Day Toggle Tabs -->
-          <div class="schedule-tabs" role="tablist" aria-label="Event days">
-            <button class="schedule-tab is-active" role="tab" aria-selected="true" aria-controls="day-sat" id="tab-sat" data-day="sat">
-              <span class="tab-day">SAT</span>
-              <span class="tab-date">28 NOV</span>
-              <span class="tab-label">Day 01</span>
-            </button>
-            <span class="tab-divider" aria-hidden="true"></span>
-            <button class="schedule-tab" role="tab" aria-selected="false" aria-controls="day-sun" id="tab-sun" data-day="sun">
-              <span class="tab-day">SUN</span>
-              <span class="tab-date">29 NOV</span>
-              <span class="tab-label">Day 02</span>
-            </button>
-          </div>
-
-          <!-- SATURDAY -->
-          <div class="schedule-day" id="day-sat" role="tabpanel" aria-labelledby="tab-sat">
-            <div class="schedule-timeline">
-
-              <div class="timeline-item reveal" data-type="main">
-                <div class="tl-time">
-                  <span class="tl-time-start">5:00 PM</span>
-                  <span class="tl-time-end">8:00 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card" role="button" tabindex="0" aria-expanded="false">
-                  <div class="tl-card-head">
-                    <span class="tl-badge tl-badge--event">EVENT 03</span>
-                    <span class="tl-duration">3 hrs</span>
-                  </div>
-                  <h3 class="tl-title">Topic Auction Challenge</h3>
-                  <p class="tl-tagline">BID SMART, WIN BIG</p>
-                  <div class="tl-expand">
-                    <p class="tl-desc">A team-based technical competition where participants use virtual coins to bid on Easy, Medium and Hard technical topics across three auction rounds. Based on their selected topics, teams solve three question papers and earn points through accuracy and speed. The team with the highest score emerges as the winner.</p>
-                    <ul class="tl-bullets">
-                      <li>Strategic use of virtual coins</li>
-                      <li>Teamwork and decision-making</li>
-                      <li>Technical problem-solving challenges</li>
-                      <li>Accuracy-based scoring and speed bonus</li>
-                    </ul>
-                  </div>
-                  <span class="tl-toggle-icon" aria-hidden="true">↓</span>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="note">
-                <div class="tl-time"><span class="tl-time-start">NOTE</span></div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card tl-card--note">
-                  <span class="tl-badge tl-badge--note">GIRLS HOSTEL</span>
-                  <p class="tl-note-text">Permission granted till <strong>8:00 PM</strong> on Saturday.</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- SUNDAY -->
-          <div class="schedule-day is-hidden" id="day-sun" role="tabpanel" aria-labelledby="tab-sun">
-            <div class="schedule-timeline">
-
-              <div class="timeline-item reveal" data-type="main">
-                <div class="tl-time">
-                  <span class="tl-time-start">10:00 AM</span>
-                  <span class="tl-time-end">12:00 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card" role="button" tabindex="0" aria-expanded="false">
-                  <div class="tl-card-head">
-                    <span class="tl-badge tl-badge--event">EVENT 01</span>
-                    <span class="tl-duration">2 hrs</span>
-                  </div>
-                  <h3 class="tl-title">Project Eclipse</h3>
-                  <p class="tl-tagline">CYBER HEIST · MORNING SESSION</p>
-                  <div class="tl-expand">
-                    <p class="tl-desc">An interactive, team-based cybersecurity investigation game. Participants take on the role of digital investigators to solve a mysterious cyber heist — a fictional case involving a stolen AI research project. Teams investigate suspicious emails, analyse server logs, decode hidden messages, crack passwords and interrogate suspects to uncover the real culprit.</p>
-                  </div>
-                  <span class="tl-toggle-icon" aria-hidden="true">↓</span>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="break">
-                <div class="tl-time">
-                  <span class="tl-time-start">12:30 PM</span>
-                  <span class="tl-time-end">1:45 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card tl-card--break">
-                  <span class="tl-badge tl-badge--break">BREAK</span>
-                  <h3 class="tl-title">Lunch Break</h3>
-                  <span class="tl-duration">1 hr 15 min</span>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="fun">
-                <div class="tl-time">
-                  <span class="tl-time-start">2:00 PM</span>
-                  <span class="tl-time-end">3:00 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card" role="button" tabindex="0" aria-expanded="false">
-                  <div class="tl-card-head">
-                    <span class="tl-badge tl-badge--fun">FUN ACTIVITY</span>
-                    <span class="tl-duration">1 hr</span>
-                  </div>
-                  <h3 class="tl-title">Think Before You Speak</h3>
-                  <p class="tl-tagline">REFRESHMENT ROUND</p>
-                  <div class="tl-expand">
-                    <p class="tl-desc">A fun quick-thinking activity where participants must answer tricky and funny questions without saying YES or NO. The host continuously challenges participants with confusing questions to test presence of mind, confidence, and quick responses. Anyone who says either forbidden word gets eliminated. Last one standing wins.</p>
-                  </div>
-                  <span class="tl-toggle-icon" aria-hidden="true">↓</span>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="main">
-                <div class="tl-time">
-                  <span class="tl-time-start">3:45 PM</span>
-                  <span class="tl-time-end">6:15 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card" role="button" tabindex="0" aria-expanded="false">
-                  <div class="tl-card-head">
-                    <span class="tl-badge tl-badge--event">EVENT 02</span>
-                    <span class="tl-duration">2 hrs 30 min</span>
-                  </div>
-                  <h3 class="tl-title">Cyber Arena</h3>
-                  <p class="tl-tagline">DIGITAL FORENSICS · AFTERNOON SESSION</p>
-                  <div class="tl-expand">
-                    <p class="tl-desc">An interactive, team-based cybersecurity investigation game where participants act as digital detectives to solve simulated cybercrime cases. Teams analyse digital evidence — server logs, IP addresses, timestamps and suspect statements — cross-examine alibis and reconstruct the sequence of events to identify the real culprit. The team that solves the mystery accurately in the shortest time secures the highest score.</p>
-                  </div>
-                  <span class="tl-toggle-icon" aria-hidden="true">↓</span>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="ceremony">
-                <div class="tl-time">
-                  <span class="tl-time-start">6:15 PM</span>
-                  <span class="tl-time-end">7:00 PM</span>
-                </div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card tl-card--ceremony">
-                  <div class="tl-card-head">
-                    <span class="tl-badge tl-badge--ceremony">CLOSING</span>
-                    <span class="tl-duration">45 min</span>
-                  </div>
-                  <h3 class="tl-title">Valedictory &amp; Final Remarks</h3>
-                  <p class="tl-tagline">CERTIFICATES · WINNERS · REFRESHMENTS</p>
-                </div>
-              </div>
-
-              <div class="timeline-item reveal" data-type="note">
-                <div class="tl-time"><span class="tl-time-start">NOTE</span></div>
-                <div class="tl-dot"><span></span></div>
-                <div class="tl-card tl-card--note">
-                  <span class="tl-badge tl-badge--note">GIRLS HOSTEL</span>
-                  <p class="tl-note-text">No hostel permission required on Sunday — event wraps within college hours.</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
       <!-- ═══ Events Names Infinite Carousel ═══ -->
       <section class="events-carousel-section" aria-label="Event Highlights Marquee">
         <div class="carousel-hud-bar section-shell">
@@ -672,7 +513,9 @@
           <div class="footer-org-lockup">
             <img src="assets/logo-bvvs.png" alt="BVVS Bagalkote" class="footer-org-logo footer-org-logo--bvvs" width="38" height="48" />
             <span class="footer-org-sep" aria-hidden="true"></span>
-            <img src="assets/logo-bec-ieee.png" alt="BEC IEEE Student Branch" class="footer-org-logo footer-org-logo--ieee" width="115" height="24" />
+            <a href="https://www.becieee.org/" target="_blank" rel="noopener noreferrer" class="footer-org-link" aria-label="BEC IEEE Official Website">
+              <img src="assets/logo-bec-ieee.png" alt="BEC IEEE Student Branch" class="footer-org-logo footer-org-logo--ieee" width="115" height="24" />
+            </a>
           </div>
         </div>
 
