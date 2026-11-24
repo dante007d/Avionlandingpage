@@ -1,7 +1,6 @@
 /**
- * torus-knot.js — A (2,3) trefoil knot rendered as lit ASCII art on canvas.
- * Z-buffered so strands pass over and under each other, turning slowly.
- * Optimized for high performance on desktop and Android mobile devices.
+ * torus-knot.js — Trefoil knot ASCII art on canvas.
+ * Performance-tuned: low-geometry on mobile, capped FPS, no flood-fill on mobile.
  */
 (() => {
   const canvas = document.getElementById('hero-canvas');
@@ -13,12 +12,17 @@
   const RAMP = '.:-=+*#%@';
   const NR = RAMP.length - 1;
   const TUBE = 0.28;
-  const NU = 540, NV = 28;
-  const TOTAL = NU * NV;
   const D_EYE = 11;
-  const ASPECT = 0.52; // char aspect ratio width/height
-  const FPS = 30;
+  const ASPECT = 0.52;
   const GAP = TUBE * 0.9;
+
+  const isMobileDevice = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+  // Key perf knob: much fewer geometry points on mobile
+  const NU = isMobileDevice ? 240 : 480;
+  const NV = isMobileDevice ? 18 : 24;
+  const FPS = isMobileDevice ? 18 : 28;
+  const TOTAL = NU * NV;
 
   /* ── lighting ──────────────────────────────────────────── */
   const lm = Math.hypot(-0.35, 0.45, 1);
@@ -89,25 +93,26 @@
   const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let running = false, visible = true, raf = 0, prevFrame = 0;
   const t0 = performance.now();
+  const FRAME_MS = 1000 / FPS;
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return false;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Cap DPR at 1.5 on mobile to cut fill rate
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobileDevice ? 1.5 : 2);
     canvas.width = Math.round(rect.width * dpr);
     canvas.height = Math.round(rect.height * dpr);
 
-    // Adapt grid based on screen dimensions
-    const isMobile = rect.width < 680;
-    cols = isMobile ? Math.min(54, Math.max(38, Math.floor(rect.width / 9))) : Math.min(84, Math.max(56, Math.floor(rect.width / 15)));
+    const mobile = rect.width < 680;
+    cols = mobile
+      ? Math.min(44, Math.max(32, Math.floor(rect.width / 10)))
+      : Math.min(72, Math.max(50, Math.floor(rect.width / 16)));
     rows = Math.round(cols * (rect.height / rect.width) * ASPECT);
-    rows = Math.max(22, Math.min(isMobile ? 38 : 46, rows));
+    rows = Math.max(18, Math.min(mobile ? 32 : 42, rows));
 
     cellW = canvas.width / cols;
     cellH = cellW / ASPECT;
-
-    // Check if height fits, otherwise scale based on height
     if (rows * cellH > canvas.height) {
       cellH = canvas.height / rows;
       cellW = cellH * ASPECT;
@@ -170,55 +175,55 @@
       outC[q] = RAMP[idx];
     }
 
-    // Gap detection at crossings
-    const halfNU = NU / 2;
-    const overThreshold = NU / 16;
-    for (let q = 0; q < n; q++) {
-      if (depthB[q] <= 0) { cutB[q] = 0; continue; }
-      const c = q % cols;
-      let isCut = false;
-      const checkNeighbor = (p) => {
-        if (depthB[p] > depthB[q] + GAP) {
-          let s = Math.abs(alongB[p] - alongB[q]);
-          if (s > halfNU) s = NU - s;
-          return s > overThreshold;
+    // Skip expensive flood-fill on mobile — just do gap detection
+    if (!isMobileDevice) {
+      const halfNU = NU / 2;
+      const overThreshold = NU / 16;
+      for (let q = 0; q < n; q++) {
+        if (depthB[q] <= 0) { cutB[q] = 0; continue; }
+        const c = q % cols;
+        let isCut = false;
+        const checkNeighbor = (p) => {
+          if (depthB[p] > depthB[q] + GAP) {
+            let s = Math.abs(alongB[p] - alongB[q]);
+            if (s > halfNU) s = NU - s;
+            return s > overThreshold;
+          }
+          return false;
+        };
+        if ((c > 0 && checkNeighbor(q - 1)) ||
+            (c < cols - 1 && checkNeighbor(q + 1)) ||
+            (q >= cols && checkNeighbor(q - cols)) ||
+            (q < n - cols && checkNeighbor(q + cols))) {
+          isCut = true;
         }
-        return false;
-      };
-
-      if ((c > 0 && checkNeighbor(q - 1)) ||
-          (c < cols - 1 && checkNeighbor(q + 1)) ||
-          (q >= cols && checkNeighbor(q - cols)) ||
-          (q < n - cols && checkNeighbor(q + cols))) {
-        isCut = true;
+        cutB[q] = isCut ? 1 : 0;
       }
-      cutB[q] = isCut ? 1 : 0;
-    }
-
-    for (let q = 0; q < n; q++) {
-      if (cutB[q]) { outC[q] = ' '; depthB[q] = 0; }
-    }
-
-    // Flood-fill cleanup of disconnected slivers
-    partB.fill(0);
-    for (let q = 0; q < n; q++) {
-      if (outC[q] === ' ' || partB[q]) continue;
-      let top = 0, size = 0;
-      stackB[top++] = q;
-      partB[q] = 1;
-      const seen = [];
-      while (top > 0) {
-        const p = stackB[--top];
-        const pc = p % cols;
-        seen.push(p);
-        size++;
-        if (pc > 0 && !partB[p - 1] && outC[p - 1] !== ' ') { partB[p - 1] = 1; stackB[top++] = p - 1; }
-        if (pc < cols - 1 && !partB[p + 1] && outC[p + 1] !== ' ') { partB[p + 1] = 1; stackB[top++] = p + 1; }
-        if (p >= cols && !partB[p - cols] && outC[p - cols] !== ' ') { partB[p - cols] = 1; stackB[top++] = p - cols; }
-        if (p < n - cols && !partB[p + cols] && outC[p + cols] !== ' ') { partB[p + cols] = 1; stackB[top++] = p + cols; }
+      for (let q = 0; q < n; q++) {
+        if (cutB[q]) { outC[q] = ' '; depthB[q] = 0; }
       }
-      if (size < 6) {
-        for (let s = 0; s < seen.length; s++) outC[seen[s]] = ' ';
+
+      // Flood-fill cleanup (desktop only)
+      partB.fill(0);
+      for (let q = 0; q < n; q++) {
+        if (outC[q] === ' ' || partB[q]) continue;
+        let top = 0, size = 0;
+        stackB[top++] = q;
+        partB[q] = 1;
+        const seen = [];
+        while (top > 0) {
+          const p = stackB[--top];
+          const pc = p % cols;
+          seen.push(p);
+          size++;
+          if (pc > 0 && !partB[p - 1] && outC[p - 1] !== ' ') { partB[p - 1] = 1; stackB[top++] = p - 1; }
+          if (pc < cols - 1 && !partB[p + 1] && outC[p + 1] !== ' ') { partB[p + 1] = 1; stackB[top++] = p + 1; }
+          if (p >= cols && !partB[p - cols] && outC[p - cols] !== ' ') { partB[p - cols] = 1; stackB[top++] = p - cols; }
+          if (p < n - cols && !partB[p + cols] && outC[p + cols] !== ' ') { partB[p + cols] = 1; stackB[top++] = p + cols; }
+        }
+        if (size < 6) {
+          for (let s = 0; s < seen.length; s++) outC[seen[s]] = ' ';
+        }
       }
     }
 
@@ -238,7 +243,6 @@
         const ch = outC[rOffset + c];
         if (ch === ' ') continue;
         const b = RAMP.indexOf(ch) / NR;
-        // Subtle cyber tint: high brightness glows toward accent/violet-white
         const red   = Math.min(255, (45 + b * 200) | 0);
         const green = Math.min(255, (40 + b * 190) | 0);
         const blue  = Math.min(255, (52 + b * 203) | 0);
@@ -251,7 +255,7 @@
   /* ── animation loop ────────────────────────────────────── */
   function frame(now) {
     if (!running) return;
-    if (!prevFrame || now - prevFrame >= 1000 / FPS) {
+    if (!prevFrame || now - prevFrame >= FRAME_MS) {
       draw((now - t0) / 1000);
       prevFrame = now;
     }

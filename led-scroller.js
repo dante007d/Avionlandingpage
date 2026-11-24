@@ -1,14 +1,16 @@
 /**
- * led-scroller.js — Amber & Red-Amber LED Matrix Scroller
- * Powers:
- * 1. #nav-led-canvas (Navbar brand sign)
- * 2. #box-led-canvas (Hero telemetry box with interactive roasting challenge text)
+ * led-scroller.js — Amber LED Matrix Scroller (perf-optimised)
+ * Single shared RAF loop. Pauses when scrolled out of view.
  */
 (() => {
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+  const FPS = isMobile ? 20 : 28;
+  const FRAME_MS = 1000 / FPS;
+
   const FONT7 = {
     A: ".###.|#...#|#...#|#####|#...#|#...#|#...#", B: "####.|#...#|#...#|####.|#...#|#...#|####.",
     C: ".###.|#...#|#....|#....|#....|#...#|.###.", D: "####.|#...#|#...#|#...#|#...#|#...#|####.",
-    E: "#####|#....|#....|####.|#....|#....|#####", F: "#####|#....|#....|####.|#....|#....|#....",
+    E: "#####|#....|#....|####.|#....|#....|#####", F: "#####|#....|#....|####.|#....|#....",
     G: ".###.|#...#|#....|#.###|#...#|#...#|.####", H: "#...#|#...#|#...#|#####|#...#|#...#|#...#",
     I: "#####|..#..|..#..|..#..|..#..|..#..|#####", J: "..###|...#.|...#.|...#.|#..#.|#..#.|.##..",
     K: "#...#|#..#.|#.#..|##...|#.#..|#..#.|#...#", L: "#....|#....|#....|#....|#....|#....|#####",
@@ -26,7 +28,6 @@
     8: ".###.|#...#|#...#|.###.|#...#|#...#|.###.", 9: ".###.|#...#|#...#|.####|....#|....#|.###.",
     ":": ".....|..#..|..#..|.....|..#..|..#..|.....", "!": "..#..|..#..|..#..|..#..|..#..|.....|..#..",
     ".": ".....|.....|.....|.....|.....|.....|..#..", "-": ".....|.....|.....|.###.|.....|.....|.....",
-    "%": "#...#|...#.|..#..|.#...|#...#|.....|.....", "/": "....#|...#.|..#..|.#...|#....|.....|.....",
     "?": ".###.|#...#|....#|...#.|..#..|.....|..#..", "'": "..#..|..#..|.....|.....|.....|.....|.....",
     " ": ".....|.....|.....|.....|.....|.....|.....",
   };
@@ -34,8 +35,7 @@
   const GL7 = {};
   for (const k in FONT7) GL7[k] = FONT7[k].split('|');
   const glyph = (c) => GL7[c] || GL7[' '];
-
-  const LH = 14; // 7 rows * 2 vertical dots
+  const LH = 14;
 
   function buildStrip(messages) {
     const strip = [];
@@ -44,7 +44,6 @@
         const gl = ch === '·'
           ? '.....|.....|.....|..#..|.....|.....|.....'.split('|')
           : glyph(ch);
-
         for (let i = 0; i < 5; i++) {
           const colm = new Array(LH).fill(null);
           for (let j = 0; j < 7; j++) {
@@ -68,27 +67,19 @@
     if (!ctx) return null;
 
     const strip = buildStrip(messages);
-
-    let LW = 40;
-    let ledSize = 2;
-    let gapX = 3.6;
-    let gapY = 2.4;
-    let padX = 6;
-    let padY = 4;
+    let LW = 40, ledSize = 2, gapX = 3.6, gapY = 2.4, padX = 6, padY = 4;
+    let visible = true;
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return false;
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
-
       padX = Math.round(6 * dpr);
       padY = Math.round(4 * dpr);
       const usableW = canvas.width - padX * 2;
       const usableH = canvas.height - padY * 2;
-
       gapY = usableH / LH;
       gapX = gapY * 1.12;
       LW = Math.max(24, Math.floor(usableW / gapX));
@@ -97,13 +88,12 @@
     }
 
     function render(t) {
+      if (!visible) return;
       ctx.fillStyle = '#0a0b0e';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       ctx.strokeStyle = '#24201c';
       ctx.lineWidth = 1;
       ctx.strokeRect(0.5, 0.5, canvas.width - 1, canvas.height - 1);
-
       ctx.fillStyle = '#060709';
       ctx.fillRect(padX - 2, padY - 2, LW * gapX + 4, LH * gapY + 4);
 
@@ -114,30 +104,26 @@
         const idx = (((c + off) % stripLen) + stripLen) % stripLen;
         const colm = strip[idx];
         const cx = padX + (c + 0.5) * gapX;
-
         for (let r = 0; r < LH; r++) {
           const cy = padY + (r + 0.5) * gapY;
           const led = colm[r];
-
           if (!led) {
             ctx.fillStyle = '#181410';
             ctx.beginPath();
             ctx.arc(cx, cy, ledSize, 0, Math.PI * 2);
             ctx.fill();
           } else {
-            // Glow
-            ctx.fillStyle = 'rgba(255, 140, 50, 0.28)';
-            ctx.beginPath();
-            ctx.arc(cx, cy, ledSize * 1.8, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Main LED
+            // Skip glow on mobile for speed
+            if (!isMobile) {
+              ctx.fillStyle = 'rgba(255,140,50,0.28)';
+              ctx.beginPath();
+              ctx.arc(cx, cy, ledSize * 1.8, 0, Math.PI * 2);
+              ctx.fill();
+            }
             ctx.fillStyle = led.main;
             ctx.beginPath();
             ctx.arc(cx, cy, ledSize, 0, Math.PI * 2);
             ctx.fill();
-
-            // Specular core
             ctx.fillStyle = led.core;
             ctx.beginPath();
             ctx.arc(cx, cy, ledSize * 0.45, 0, Math.PI * 2);
@@ -155,21 +141,23 @@
       ctx.fillRect(canvas.width - 2 - rw, canvas.height - 2 - rw, rw, rw);
     }
 
+    // Pause when off-screen
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        visible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(canvas);
+    }
+
     return { resize, render };
   }
 
-  // 1. Navbar scroller
   const navInstance = createMatrixInstance('nav-led-canvas', [
     ['AVION', '#ffb347', '#ffd9a0'],
     ['   ·   ', '#3a2818', '#3a2818'],
     ['TECH EVENTS', '#ff8447', '#ffcaa0'],
     ['   ·   ', '#3a2818', '#3a2818'],
-    ['AVION 03', '#ffb347', '#ffd9a0'],
-    ['   ·   ', '#3a2818', '#3a2818'],
   ], 18);
 
-  // 2. Hero Box Roast scroller
-  // Catchy roast sequence conveying: you think you can win? 99% fail here. Test your skills if you dare!
   const boxInstance = createMatrixInstance('box-led-canvas', [
     ['THINK YOU CAN WIN? CUTE', '#ffb347', '#ffd9a0'],
     ['   ·   ', '#ff4d4d', '#ffa6a6'],
@@ -177,30 +165,27 @@
     ['   ·   ', '#3a2818', '#3a2818'],
     ['TEST YOUR SKILLS IF YOU DARE', '#ffb347', '#ffd9a0'],
     ['   ·   ', '#ff4d4d', '#ffa6a6'],
-    ['YOU WILL NOT SURVIVE ROUND 1', '#ff4d4d', '#ffa6a6'],
-    ['   ·   ', '#3a2818', '#3a2818'],
     ['BRING YOUR BRAIN NOT EXCUSES', '#f9cb28', '#fce59a'],
-    ['   ·   ', '#ff4d4d', '#ffa6a6'],
-    ['PROVE US WRONG', '#50e3c2', '#b0f2e3'],
     ['   ·   ', '#3a2818', '#3a2818'],
-  ], 22);
+  ], 20);
 
   const instances = [navInstance, boxInstance].filter(Boolean);
   if (!instances.length) return;
 
   const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let running = false;
-  let raf = 0;
-  let prevTime = 0;
+  let raf = 0, prevTime = 0, running = false;
   const t0 = performance.now();
 
-  function resizeAll() {
-    instances.forEach(inst => inst.resize());
+  instances.forEach(inst => inst.resize());
+
+  if (noMotion) {
+    instances.forEach(inst => inst.render(0));
+    return;
   }
 
   function frame(now) {
     if (!running) return;
-    if (!prevTime || now - prevTime >= 1000 / 30) {
+    if (!prevTime || now - prevTime >= FRAME_MS) {
       const t = (now - t0) / 1000;
       instances.forEach(inst => inst.render(t));
       prevTime = now;
@@ -208,33 +193,16 @@
     raf = requestAnimationFrame(frame);
   }
 
-  function start() {
-    if (noMotion || running) return;
-    running = true;
-    raf = requestAnimationFrame(frame);
-  }
-
-  function stop() {
-    running = false;
-    cancelAnimationFrame(raf);
-  }
-
-  resizeAll();
-  if (noMotion) {
-    instances.forEach(inst => inst.render(0));
-    return;
-  }
+  function start() { if (running) return; running = true; raf = requestAnimationFrame(frame); }
+  function stop() { running = false; cancelAnimationFrame(raf); }
 
   start();
 
   window.addEventListener('resize', () => {
-    resizeAll();
-    const t = (performance.now() - t0) / 1000;
-    instances.forEach(inst => inst.render(t));
+    instances.forEach(inst => inst.resize());
   }, { passive: true });
 
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') stop();
-    else start();
+    if (document.visibilityState === 'hidden') stop(); else start();
   });
 })();

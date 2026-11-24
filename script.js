@@ -141,23 +141,20 @@ if ('IntersectionObserver' in window && !reduceMotion) {
 /* ── CASE INFORMATION DATA (Focused text briefing) ───────── */
 const CASES = {
   eclipse: {
-    tag: 'CASE // 01 · CLASSIFIED INCIDENT',
+    tag: 'CASE // 01 · KNOWLEDGE CHALLENGE',
     title: 'Project Eclipse',
-    genre: 'Cybersecurity | AI Threat | Digital Investigation',
-    desc: 'A classified AI project has been compromised. Research files have disappeared, security systems are disabled, and the lead scientist is missing. Investigate suspects, decode encrypted messages, analyse server logs, and reconstruct the events to expose the real culprit.',
-    mission: 'Uncover the insider. Expose PHANTOM. Recover the truth.'
+    desc: 'A 60-level question challenge where players advance by answering each level\'s main question correctly. A wrong answer sends them through up to four rooms, each with an easier question — answering correctly returns them to the main progression, while failing all four resets them to Level 0. The game combines knowledge, persistence, and second chances.',
+    mission: 'Answer correctly. Survive the rooms. Reach Level 60.'
   },
   mystery: {
     tag: 'CASE // 02 · DIGITAL FORENSICS',
     title: 'Cyber Mystery Arena',
-    genre: 'Cybersecurity | Mystery | Digital Investigation',
     desc: 'Investigate mysterious digital incidents by analysing login records, decoding secret messages, and identifying suspicious activities. Work individually or in teams to uncover the truth using the evidence provided.',
     mission: 'Find the clues. Connect the evidence. Solve the mystery.'
   },
   auction: {
     tag: 'CASE // 03 · COMPETITIVE ARENA',
     title: 'Topic Auction Challenge',
-    genre: 'Strategy | Knowledge | Competitive Auction',
     desc: 'Forget traditional auctions. Here, teams compete using virtual coins to purchase knowledge topics instead of physical items. Every bid matters. Choose your topics wisely across Easy, Medium, and Hard rounds, then solve the question papers to maximise your score.',
     mission: 'Bid strategically. Choose wisely. Prove your knowledge.'
   }
@@ -167,7 +164,6 @@ const CASES = {
 const modal = document.getElementById('case-modal');
 const modalCaseTag = document.getElementById('modal-case-tag');
 const modalTitle = document.getElementById('modal-title');
-const modalGenre = document.getElementById('modal-genre');
 const modalDesc = document.getElementById('modal-desc');
 const modalMission = document.getElementById('modal-mission');
 const modalClose = document.querySelector('.modal-close');
@@ -181,7 +177,6 @@ function openCaseModal(caseKey, triggeringElement) {
   activeCardElement = triggeringElement;
   modalCaseTag.textContent = data.tag;
   modalTitle.textContent = data.title;
-  modalGenre.textContent = data.genre;
   modalDesc.textContent = data.desc;
   modalMission.textContent = data.mission;
 
@@ -278,3 +273,62 @@ if (brandLogo && !reduceMotion && window.matchMedia('(hover: hover)').matches) {
     });
   }
 }
+
+
+/* ── SCHEDULE: Day tab switching ──────────────────────────── */
+(function () {
+  const tabs = document.querySelectorAll('.schedule-tab');
+  const panels = document.querySelectorAll('.schedule-day');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.day;
+
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(p => p.classList.add('is-hidden'));
+
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+
+      const panel = document.getElementById('day-' + target);
+      if (panel) {
+        panel.classList.remove('is-hidden');
+        // Re-trigger reveal animations for newly shown panel
+        panel.querySelectorAll('.reveal').forEach(el => {
+          el.classList.remove('is-visible');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => el.classList.add('is-visible'));
+          });
+        });
+      }
+    });
+
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tab.click(); }
+    });
+  });
+
+  /* ── Expandable timeline cards ──────────────────────────── */
+  const tlCards = document.querySelectorAll('.tl-card[role="button"]');
+  tlCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const isOpen = card.classList.contains('is-expanded');
+      // Collapse all others
+      tlCards.forEach(c => {
+        c.classList.remove('is-expanded');
+        c.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        card.classList.add('is-expanded');
+        card.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+    });
+  });
+})();
