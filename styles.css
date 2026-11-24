@@ -2990,8 +2990,8 @@ video {
 }
 
 .timeline-item[data-type="ceremony"] .tl-dot span {
-  border-color: #ffb347;
-  box-shadow: 0 0 10px rgba(255,179,71,.4);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(217,191,200,.35);
 }
 
 .timeline-item[data-type="note"] .tl-dot span {
@@ -3039,8 +3039,8 @@ video {
 }
 
 .tl-card--ceremony {
-  background: linear-gradient(135deg, rgba(255,179,71,.08), rgba(255,179,71,.02));
-  border-color: rgba(255,179,71,.3);
+  background: linear-gradient(135deg, rgba(217,191,200,.08), rgba(217,191,200,.02));
+  border-color: rgba(217,191,200,.25);
 }
 
 .tl-card--note {
@@ -3105,9 +3105,9 @@ video {
 }
 
 .tl-badge--ceremony {
-  background: rgba(255,179,71,.1);
-  color: #ffb347;
-  border: 1px solid rgba(255,179,71,.3);
+  background: rgba(217,191,200,.12);
+  color: var(--accent);
+  border: 1px solid rgba(217,191,200,.25);
 }
 
 .tl-badge--note {
