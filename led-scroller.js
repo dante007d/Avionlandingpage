@@ -186,19 +186,23 @@
 
   // 2. Hero Challenge Radar scroller
   const boxInstance = createMatrixInstance('box-led-canvas', [
-    ['THINK YOU CAN WIN? CUTE', '#ffb347', '#ffd9a0'],
-    ['   ·   ', '#ff4d4d', '#ffa6a6'],
-    ['99% FAIL HERE', '#ff4d4d', '#ffa6a6'],
+    ['YOU ARE NOT READY FOR THIS', '#ff4d4d', '#ffa6a6'],
     ['   ·   ', '#3a2818', '#3a2818'],
-    ['TEST YOUR SKILLS IF YOU DARE', '#ffb347', '#ffd9a0'],
+    ['MOST TEAMS CHOKE UNDER PRESSURE', '#ff4d4d', '#ffa6a6'],
     ['   ·   ', '#ff4d4d', '#ffa6a6'],
-    ['YOU WILL NOT SURVIVE ROUND 1', '#ff4d4d', '#ffa6a6'],
+    ['YOUR CONFIDENCE WILL BETRAY YOU', '#ffb347', '#ffd9a0'],
     ['   ·   ', '#3a2818', '#3a2818'],
-    ['BRING YOUR BRAIN NOT EXCUSES', '#f9cb28', '#fce59a'],
+    ['WE DARE YOU TO LAST 10 MINUTES', '#ff4d4d', '#ffa6a6'],
     ['   ·   ', '#ff4d4d', '#ffa6a6'],
-    ['PROVE US WRONG', '#50e3c2', '#b0f2e3'],
+    ['YOUR WHOLE SQUAD WILL CRUMBLE', '#f9cb28', '#fce59a'],
     ['   ·   ', '#3a2818', '#3a2818'],
-  ], 22);
+    ['NOBODY HAS BEATEN LEVEL 60 YET', '#ff4d4d', '#ffa6a6'],
+    ['   ·   ', '#ff4d4d', '#ffa6a6'],
+    ['SCARED? GOOD. YOU SHOULD BE', '#ffb347', '#ffd9a0'],
+    ['   ·   ', '#3a2818', '#3a2818'],
+    ['PROVE US WRONG IF YOU CAN', '#50e3c2', '#b0f2e3'],
+    ['   ·   ', '#3a2818', '#3a2818'],
+  ], 10);
 
   const instances = [navInstance, boxInstance].filter(Boolean);
   if (!instances.length) return;

@@ -10,21 +10,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Syncopate:wght@700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=2.7" />
-    <script src="torus-knot.js?v=2.7" defer></script>
-    <script src="led-scroller.js?v=2.7" defer></script>
-    <script src="card-dither.js?v=2.7" defer></script>
-    <script src="script.js?v=2.7" defer></script>
+    <link rel="stylesheet" href="styles.css?v=2.8" />
+    <script src="torus-knot.js?v=2.8" defer></script>
+    <script src="led-scroller.js?v=2.8" defer></script>
+    <script src="card-dither.js?v=2.8" defer></script>
+    <script src="script.js?v=2.8" defer></script>
   </head>
   <body>
     <!-- Real-time scroll indicator -->
     <div id="scroll-progress" class="scroll-progress-bar" aria-hidden="true"></div>
 
     <header class="site-header" id="top">
-      <div class="header-brand-group">
+      <div class="header-left">
         <a class="brand-led-link" href="#top" aria-label="AVION Tech Events home">
           <canvas id="nav-led-canvas" width="220" height="36" aria-label="AVION LED banner"></canvas>
         </a>
+      </div>
+      <div class="header-center">
         <div class="header-org-badge" aria-label="Organized by BVVS and BEC IEEE">
           <img src="assets/logo-bvvs.png" alt="BVVS" class="header-org-logo header-org-logo--bvvs" width="26" height="33" />
           <span class="header-org-sep" aria-hidden="true"></span>
@@ -33,13 +35,12 @@
           </a>
         </div>
       </div>
-      <div class="header-action">
+      <div class="header-right">
         <a class="header-register-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScW7KL_vRKqCBmTYLalwBW6UvlXmxyEDCJ2xweAR-9OCRe-hw/viewform" target="_blank" rel="noopener noreferrer">
           <span>REGISTER</span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <div class="header-meta"><span class="live-dot"></span> SYSTEM OPEN</div>
     </header>
 
     <main>
